@@ -1,16 +1,33 @@
-const int MAX_LIMIT = 1500000;
-bool is_prime[MAX_LIMIT + 1];
+/* Normal sieve can run up to N = 1e7 */ 
+const int N = 1e7 + 1;
+int isPr[N];
 vector<int> primes;
 
-void sieve() {
-    fill(is_prime + 2, is_prime + MAX_LIMIT + 1, true);
-    for (int p = 2; p * p <= MAX_LIMIT; p++) {
-        if (is_prime[p]) {
-            for (int i = p * p; i <= MAX_LIMIT; i += p)
-                is_prime[i] = false;
+void sieve(){
+    for (int i = 2; i < N; ++i) isPr[i] = 1;
+    for (int i = 2; i < N; ++i) {
+        if(isPr[i]){
+            primes.push_back(i);
+            for (int j = i * i; j < N; j += i) {
+                isPr[j] = 0;
+            }
         }
     }
-    for (int p = 2; p <= MAX_LIMIT; p++) {
-        if (is_prime[p]) primes.push_back(p);
+}
+
+
+/* same code but saves lp[x] instead of isPr */
+const int N = 1e7;
+int lp[N];
+vector<int> primes;
+
+void sieve(){
+    for (int i = 2; i < N; ++i) {
+        if(!lp[i]){
+            primes.push_back(i);
+            for (int j = i * i; j < N; j += i) {
+                if(!lp[j]) lp[j] = i;
+            }
+        }
     }
 }
